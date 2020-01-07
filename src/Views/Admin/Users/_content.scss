@@ -1,0 +1,51 @@
+$border_color: rgba(0, 0, 0, 0.09);
+
+#contents {
+  .title {
+    font-weight: 700;
+    font-size: 22px;
+  }
+}
+
+.contents-table {
+  border: 1px solid $border_color;
+  border-radius: 6px;
+  background: #fff;
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    min-width: 600px;
+    th,
+    td {
+      text-align: center;
+      padding: 7px;
+    }
+    thead {
+      tr {
+        th {
+          padding: 10px 15px;
+        }
+        border-bottom: 1px solid $border_color;
+      }
+    }
+
+    tbody {
+      .actions {
+        i {
+          height: 18px;
+          svg {
+            width: 11px;
+            height: 11px;
+          }
+        }
+      }
+      tr {
+        border-bottom: 1px solid $border_color;
+        &:last-of-type {
+          border: none;
+        }
+      }
+    }
+  }
+}

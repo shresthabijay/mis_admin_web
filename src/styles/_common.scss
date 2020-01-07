@@ -1,0 +1,43 @@
+body {
+  margin: 0;
+  background: #f4f4f4;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+  margin: 0;
+}
+
+.wrap {
+  width: 90%;
+  margin: auto;
+}
+
+.hgap {
+  display: inline-block;
+  width: 10px;
+}
+
+.gap {
+  height: 10px;
+}
+
+.flex {
+  display: flex;
+  &.jcsb {
+    justify-content: space-between;
+  }
+  &.ci {
+    align-items: center;
+  }
+  &.jcr {
+    justify-content: flex-end;
+  }
+  &.jcc {
+    justify-content: center;
+  }
+}
