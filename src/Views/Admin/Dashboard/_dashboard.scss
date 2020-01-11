@@ -16,6 +16,14 @@ section#dashboard {
 
   .dashboard-right {
     flex: 1;
+    height: 100vh;
+
+    .content-area {
+      height: calc(100% - 80px);
+      max-height: calc(100% - 80px);
+      overflow-y: scroll;
+      padding: 0 5% ;
+    }
   }
 }
 

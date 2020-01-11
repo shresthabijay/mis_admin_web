@@ -6,6 +6,11 @@ import { Switch, Route } from "react-router-dom";
 import Users from "../Users/Users";
 import Stores from "../Stores/Stores";
 import UserRole from "../UserRoles/UserRoles";
+import { Stream } from "../Stream/Stream";
+import { Course } from "../Course/Course";
+import { StreamAdmin } from "../StreamAdmin/StreamAdmin";
+import { StreamCourse } from "../StreamCourse/StreamCourse";
+import { Teacher } from "../Teacher/Teacher";
 
 export default function Dashboard(props) {
   const [sliderCollapsed, setSliderCollapsed] = React.useState(false);
@@ -25,8 +30,13 @@ export default function Dashboard(props) {
             sliderCollapsed={sliderCollapsed}
             setSliderCollapsed={setSliderCollapsed}
           />
-          <div className="wrap">
+          <div className="content-area">
             <Switch>
+              <Route path={props.match.url + "/streams"} exact component={Stream} />
+              <Route path={props.match.url + "/courses"} exact component={Course} />
+              <Route path={props.match.url + "/stream_admins"} exact component={StreamAdmin} />
+              <Route path={props.match.url + "/stream_courses"} exact component={StreamCourse} />
+              <Route path={props.match.url + "/teachers"} exact component={Teacher} />
               <Route path={props.match.url + "/"} exact component={Users} />
               <Route
                 path={props.match.url + "/store"}
