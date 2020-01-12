@@ -11,6 +11,7 @@ import { Course } from "../Course/Course";
 import { StreamAdmin } from "../StreamAdmin/StreamAdmin";
 import { StreamCourse } from "../StreamCourse/StreamCourse";
 import { Teacher } from "../Teacher/Teacher";
+import { Student } from "../Student/Student";
 
 export default function Dashboard(props) {
   const [sliderCollapsed, setSliderCollapsed] = React.useState(false);
@@ -37,6 +38,7 @@ export default function Dashboard(props) {
               <Route path={props.match.url + "/stream_admins"} exact component={StreamAdmin} />
               <Route path={props.match.url + "/stream_courses"} exact component={StreamCourse} />
               <Route path={props.match.url + "/teachers"} exact component={Teacher} />
+              <Route path={props.match.url + "/students"} exact component={Student} />
               <Route path={props.match.url + "/"} exact component={Users} />
               <Route
                 path={props.match.url + "/store"}
