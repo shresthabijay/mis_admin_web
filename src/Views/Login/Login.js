@@ -20,6 +20,7 @@ export default function Login(props) {
     setState({ ...state, loading: true });
     doLogin(payload)
       .then(res => {
+        console.log(res)
         setState({
           ...state,
           loading: false
@@ -27,7 +28,7 @@ export default function Login(props) {
         localStorage.setItem("login_details", JSON.stringify(res.details));
         localStorage.setItem("token", res.token);
         if (res.details.is_admin) {
-          props.history.push("/admin");
+          props.history.push("/admin/notices");
         }
         if (res.details.is_user) {
           props.history.push("/store_user");
@@ -53,7 +54,7 @@ export default function Login(props) {
     <section id="login">
       <div className="login-controls">
         <header>
-          <div className="title">Shrestha Store Login</div>
+          <div className="title">MIS Login</div>
         </header>
         <Form
           onSubmit={e => {

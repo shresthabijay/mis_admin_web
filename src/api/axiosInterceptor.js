@@ -1,6 +1,6 @@
 import Axios from "axios";
 import { notification } from "antd";
-export const base_url = "http://shresthastore.com/api/public/";
+export const base_url = "http://shresthastore.com/mis/api/public/";
 // export const base_url = "http://localhost/stock/public/";
 
 export const axiosInstance = Axios.create({
@@ -9,7 +9,7 @@ export const axiosInstance = Axios.create({
 });
 
 //add token to all request
-axiosInstance.interceptors.request.use(function(config) {
+axiosInstance.interceptors.request.use(function (config) {
   const token = localStorage.getItem("token");
   config.headers.Authorization = "Bearer " + token;
   return config;
@@ -17,7 +17,7 @@ axiosInstance.interceptors.request.use(function(config) {
 
 axiosInstance.interceptors.response.use(
   //handle on success
-  function(response) {
+  function (response) {
     if (response.data && response.data.message) {
       notification.success({
         message: response.data.message,
@@ -28,7 +28,7 @@ axiosInstance.interceptors.response.use(
   },
 
   //handle on error
-  function(error) {
+  function (error) {
     if (error.response && error.response.data) {
       if (error.response.data.message) {
         // notification.error({

@@ -7,31 +7,10 @@ export default Form.create('add-update-course-form')((props) => {
 
   const { getFieldDecorator, setFieldsValue, resetFields } = props.form;
   const [loading, setLoading] = React.useState(false);
-  const [remoteData, setRemoteData] = React.useState(false)
-  const [remoteLoading, setRemoteLoading] = React.useState(true)
 
   React.useEffect(() => {
     if (props.isUpdate) setFieldsValue(props.defaultValues)
   }, [props.isUpdate])
-
-  React.useEffect(() => {
-    setRemoteLoading(true)
-
-    async function loadRemoteData() {
-      let remoteData = {}
-      let semesterData = await new Promise((resolve, reject) => {
-        setTimeout(() => resolve([{ id: 1, name: 'First Semester' }, { id: 2, name: 'Second Semester' }, { id: 3, name: 'Third Semester' }, { id: 4, name: 'Fourth Semester' }]), 5000)
-      })
-      remoteData.semester = semesterData
-      return remoteData
-    }
-
-    loadRemoteData().then((remoteData) => {
-      setRemoteData(remoteData)
-      setRemoteLoading(false)
-    })
-  }, [])
-
 
   const handleAdd = (e) => {
     e.preventDefault();
@@ -40,11 +19,14 @@ export default Form.create('add-update-course-form')((props) => {
 
     props.form.validateFields((err, values) => {
       if (!err) {
-        setTimeout(() => {
-          props.handleCancel()
-          props.form.resetFields();
+        props.handleAdd(values).then(() => {
+          handleCancel()
+          resetFields()
           setLoading(false)
-        }, 1500)
+        }).catch(() => {
+          //handle if error
+          setLoading(false)
+        })
       }
       else {
         setLoading(false)
@@ -59,11 +41,14 @@ export default Form.create('add-update-course-form')((props) => {
 
     props.form.validateFields((err, values) => {
       if (!err) {
-        setTimeout(() => {
-          props.handleCancel()
-          props.form.resetFields();
+        props.handleUpdate(values).then(() => {
+          handleCancel()
+          resetFields()
           setLoading(false)
-        }, 1500)
+        }).catch(() => {
+          //handle if error
+          setLoading(false)
+        })
       }
       else {
         setLoading(false)
@@ -111,20 +96,6 @@ export default Form.create('add-update-course-form')((props) => {
               <Input
                 placeholder="course name"
               />,
-            )}
-          </Form.Item>
-          <Form.Item label="semsester" >
-            {getFieldDecorator('semester', {
-              rules: [
-                {
-                  required: true,
-                  message: 'Please select a semester',
-                },
-              ],
-            })(
-              <Select loading={remoteLoading} placeholder='semester' >
-                {!remoteLoading && remoteData.semester.map((semesterData) => (<Option key={semesterData.id} value={semesterData.name}>{semesterData.name}</Option>))}
-              </Select>
             )}
           </Form.Item>
         </Form>

@@ -1,16 +1,41 @@
 import React from "react"
 import { Table, Modal, Tag, Button, Divider } from 'antd'
 import AddUpdateStreamModal from "./AddUpdateStreamModal"
+import { getStreams, deleteStream, updateStream, addStream } from "../../../api/apiCalls"
 
 export const Stream = () => {
   const [showModal, setShowModal] = React.useState(false)
   const [updateData, setUpdateData] = React.useState(null)
   const [isUpdate, setIsUpdate] = React.useState(false)
+  const [tableData, setTableData] = React.useState([])
+  const [isLoading, setIsLoading] = React.useState(true)
 
-  const handleDelete = async (record) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => resolve(true), 1000)
+  React.useEffect(() => {
+    setIsLoading(true)
+    getStreams().then((res) => {
+      setTableData(res)
+      setIsLoading(false)
+    }).catch((err) => {
+      setIsLoading(false)
     })
+  }, [])
+
+  const handleDelete = async (recordToDelete) => {
+    let response = await deleteStream(recordToDelete.id)
+    setTableData(tableData.filter(record => (recordToDelete.id !== record.id)))
+    return response
+  }
+
+  const handleAdd = async (formData) => {
+    const response = await addStream({ name: formData.name })
+    setTableData([...tableData, formData])
+    return response
+  }
+
+  const handleUpdate = async (formData) => {
+    const response = await updateStream(updateData.id, { name: formData.name })
+    setTableData(tableData.map(record => (updateData.id === record.id ? formData : record)))
+    return response
   }
 
   const handleModalCancel = () => {
@@ -45,15 +70,10 @@ export const Stream = () => {
 
   const columns = [
     {
-      title: 'id',
-      dataIndex: 'id',
-      key: 'id',
-      render: text => <a>{text}</a>,
-    },
-    {
       title: 'name',
       dataIndex: 'name',
       key: 'name',
+      ellipsis: true,
     },
     {
       title: 'Action',
@@ -62,19 +82,16 @@ export const Stream = () => {
     },
   ];
 
-  const data = [];
-
-  for (let i = 1; i <= 60; i++) {
-    data.push({
-      key: i,
-      name: 'Computer ' + i.toString(),
-      id: i
-    });
-  }
-
   return (
     <div className="streams-page">
-      <AddUpdateStreamModal visible={showModal} isUpdate={isUpdate} defaultValues={updateData} handleCancel={handleModalCancel} />
+      <AddUpdateStreamModal
+        visible={showModal}
+        isUpdate={isUpdate}
+        defaultValues={updateData}
+        handleCancel={handleModalCancel}
+        handleAdd={handleAdd}
+        handleUpdate={handleUpdate}
+      />
       <br />
       <div className="flex jcsb">
         <h1 className="title"> Streams </h1>
@@ -92,7 +109,8 @@ export const Stream = () => {
       <Table
         bordered
         columns={columns}
-        dataSource={data}
+        dataSource={tableData.map((record, i) => ({ ...record, key: i + 1 }))}
+        loading={isLoading}
         rowKey={record => record.id}
         rowClassName="custom-table-row"
       />

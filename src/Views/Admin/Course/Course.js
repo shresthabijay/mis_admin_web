@@ -1,16 +1,41 @@
 import React from "react"
 import { Table, Modal, Tag, Button, Divider } from 'antd'
 import AddUpdateCourseModal from "./AddUpdateCourseModal"
+import { getCourses, addCourse, updateCourse, deleteCourse } from "../../../api/apiCalls"
 
 export const Course = () => {
   const [showModal, setShowModal] = React.useState(false)
   const [updateData, setUpdateData] = React.useState(null)
   const [isUpdate, setIsUpdate] = React.useState(false)
+  const [tableData, setTableData] = React.useState([])
+  const [isLoading, setIsLoading] = React.useState(true)
 
-  const handleDelete = async (record) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => resolve(true), 1000)
+  React.useEffect(() => {
+    setIsLoading(true)
+    getCourses().then((res) => {
+      setTableData(res)
+      setIsLoading(false)
+    }).catch((err) => {
+      setIsLoading(false)
     })
+  }, [])
+
+  const handleDelete = async (recordToDelete) => {
+    let response = await deleteCourse(recordToDelete.id)
+    setTableData(tableData.filter(record => (recordToDelete.id !== record.id)))
+    return response
+  }
+
+  const handleAdd = async (formData) => {
+    const response = await addCourse({ name: formData.name })
+    setTableData([...tableData, formData])
+    return response
+  }
+
+  const handleUpdate = async (formData) => {
+    const response = await updateCourse(updateData.id, { name: formData.name })
+    setTableData(tableData.map(record => (updateData.id === record.id ? formData : record)))
+    return response
   }
 
   const handleModalCancel = () => {
@@ -45,12 +70,6 @@ export const Course = () => {
 
   const columns = [
     {
-      title: 'id',
-      dataIndex: 'id',
-      key: 'id',
-      render: text => <a>{text}</a>,
-    },
-    {
       title: 'name',
       dataIndex: 'name',
       key: 'name',
@@ -61,32 +80,22 @@ export const Course = () => {
       key: 'course_code',
     },
     {
-      title: 'semester',
-      dataIndex: 'semester',
-      key: 'semester',
-    },
-    {
       title: 'Action',
       key: 'action',
       render: (text, record) => (<ActionComponent text={text} record={record} />)
     },
   ];
 
-  const data = [];
-
-  for (let i = 1; i <= 60; i++) {
-    data.push({
-      key: i,
-      name: 'MATHS',
-      id: i,
-      course_code: i + 101,
-      semester: 'First Semester',
-    });
-  }
-
   return (
     <div className="courses-page">
-      <AddUpdateCourseModal visible={showModal} isUpdate={isUpdate} defaultValues={updateData} handleCancel={handleModalCancel} />
+      <AddUpdateCourseModal
+        visible={showModal}
+        isUpdate={isUpdate}
+        defaultValues={updateData}
+        handleAdd={handleAdd}
+        handleUpdate={handleUpdate}
+        handleCancel={handleModalCancel}
+      />
       <br />
       <div className="flex jcsb">
         <h1 className="title"> Courses </h1>
@@ -104,8 +113,8 @@ export const Course = () => {
       <Table
         bordered
         columns={columns}
-        dataSource={data}
-        rowKey={record => record.id}
+        dataSource={tableData.map((record, i) => ({ ...record, key: i }))}
+        loading={isLoading}
         rowClassName="custom-table-row"
       />
     </div>

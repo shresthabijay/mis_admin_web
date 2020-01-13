@@ -12,17 +12,17 @@ export default Form.create('add-update-stream-form')((props) => {
 
 
   const handleAdd = (e) => {
-    e.preventDefault();
-
     setLoading(true)
-
     props.form.validateFields((err, values) => {
       if (!err) {
-        setTimeout(() => {
-          props.handleCancel()
-          props.form.resetFields();
+        props.handleAdd(values).then(() => {
+          handleCancel()
+          resetFields()
           setLoading(false)
-        }, 1500)
+        }).catch(() => {
+          //handle if error
+          setLoading(false)
+        })
       }
       else {
         setLoading(false)
@@ -31,22 +31,21 @@ export default Form.create('add-update-stream-form')((props) => {
   }
 
   const handleUpdate = (e) => {
-    e.preventDefault();
-
     setLoading(true)
-
     props.form.validateFields((err, values) => {
       if (!err) {
-        setTimeout(() => {
-          props.handleCancel()
-          props.form.resetFields();
+        props.handleUpdate(values).then(() => {
+          handleCancel()
+          resetFields()
           setLoading(false)
-        }, 1500)
+        }).catch(() => {
+          //handle if error
+          setLoading(false)
+        })
       }
       else {
         setLoading(false)
       }
-
     });
   }
 
@@ -89,5 +88,3 @@ export default Form.create('add-update-stream-form')((props) => {
   );
 }
 )
-
-

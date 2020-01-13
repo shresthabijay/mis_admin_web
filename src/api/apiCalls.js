@@ -8,13 +8,44 @@ export const doLogin = payload => {
   return axiosInstance.post("login", payload);
 };
 
-export const getStores = () => {
-  return axiosInstance.get("store_all");
+export const addStream = payload => {
+  return axiosInstance.post("stream", payload);
+};
+
+export const updateStream = (id, payload) => {
+  return axiosInstance.put(`stream/${id}`, payload);
+};
+
+export const deleteStream = id => {
+  return axiosInstance.delete(`stream/${id}`);
+};
+
+export const getStreams = () => {
+  return axiosInstance.get("stream");
+};
+
+export const addCourse = payload => {
+  return axiosInstance.post("course", payload);
+};
+
+export const updateCourse = (id, payload) => {
+  return axiosInstance.put(`course/${id}`, payload);
+};
+
+export const deleteCourse = id => {
+  return axiosInstance.delete(`course/${id}`);
+};
+
+
+export const getCourses = () => {
+  return axiosInstance.get("course");
 };
 
 export const getUsers = () => {
   return axiosInstance.get("user");
 };
+
+export const getStores = () => { }
 
 export const addUser = payload => {
   return axiosInstance.post("user", payload);
