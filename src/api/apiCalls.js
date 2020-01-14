@@ -8,6 +8,8 @@ export const doLogin = payload => {
   return axiosInstance.post("login", payload);
 };
 
+//streams
+
 export const addStream = payload => {
   return axiosInstance.post("stream", payload);
 };
@@ -24,6 +26,9 @@ export const getStreams = () => {
   return axiosInstance.get("stream");
 };
 
+
+//course
+
 export const addCourse = payload => {
   return axiosInstance.post("course", payload);
 };
@@ -36,58 +41,54 @@ export const deleteCourse = id => {
   return axiosInstance.delete(`course/${id}`);
 };
 
-
 export const getCourses = () => {
   return axiosInstance.get("course");
+};
+
+//teachers
+
+export const addTeacher = payload => {
+  return axiosInstance.post("teacher", payload);
+};
+
+export const updateTeacher = (id, payload) => {
+  return axiosInstance.put(`teacher/${id}`, payload);
+};
+
+export const deleteTeacher = id => {
+  return axiosInstance.delete(`teacher/${id}`);
+};
+
+export const getTeachers = () => {
+  return axiosInstance.get("teacher");
+};
+
+//users
+
+export const addUser = payload => {
+  return axiosInstance.post("user", payload);
+};
+
+export const updateUser = (id, payload) => {
+  return axiosInstance.put(`user/${id}`, payload);
+};
+
+export const deleteUser = id => {
+  return axiosInstance.delete(`user/${id}`);
 };
 
 export const getUsers = () => {
   return axiosInstance.get("user");
 };
 
-export const getStores = () => { }
+//reset user password
 
-export const addUser = payload => {
-  return axiosInstance.post("user", payload);
-};
-export const addStore = payload => {
-  return axiosInstance.post("store", payload);
-};
-export const getRoles = () => {
-  return axiosInstance.get("view_user_role");
-};
+export const resetUserPassword = (payload) => {
+  return axiosInstance.post("reset_password", payload);
+}
 
-export const assignRoles = payload => {
-  return axiosInstance.post("assign_role", payload);
-};
+// roles
 
-export const deleteUser = user_id => {
-  return axiosInstance.delete("user/" + user_id);
-};
-export const deleteStore = id => {
-  return axiosInstance.delete("store/" + id);
-};
-
-export const resetUser = id => {
-  return axiosInstance.post("reset_password", { user_id: id });
-};
-
-export const getMyStores = () => {
-  return axiosInstance.get("store");
-};
-
-export const getStoreSupplier = store_id => {
-  return axiosInstance.get("supplier/" + store_id);
-};
-
-export const getStoreProduct = store_id => {
-  return axiosInstance.get("product/" + store_id);
-};
-
-export const addSupplier = payload => {
-  return axiosInstance.post("supplier", payload);
-};
-
-export const addProduct = payload => {
-  return axiosInstance.post("product", payload);
-};
+export const getAllAvailableRoles = () => {
+  return axiosInstance.get('roles')
+}

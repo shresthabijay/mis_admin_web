@@ -7,32 +7,10 @@ export default Form.create('add-update-teacher-form')((props) => {
 
   const { getFieldDecorator, setFieldsValue, resetFields } = props.form;
   const [loading, setLoading] = React.useState(false);
-  const [remoteData, setRemoteData] = React.useState(false)
-  const [remoteLoading, setRemoteLoading] = React.useState(true)
-  const [showPasswordUpdate, setShowPasswordUpdate] = React.useState(false)
 
   React.useEffect(() => {
     if (props.isUpdate) setFieldsValue(props.defaultValues)
   }, [props.isUpdate])
-
-  React.useEffect(() => {
-    setRemoteLoading(true)
-
-    async function loadRemoteData() {
-      let remoteData = {}
-      let streamData = await new Promise((resolve, reject) => {
-        setTimeout(() => resolve([{ id: 1, name: 'Stream 1' }, { id: 2, name: 'Stream 2' }, { id: 3, name: 'Stream 3' }, { id: 4, name: 'Stream 4' }]), 5000)
-      })
-      remoteData.stream = streamData
-      return remoteData
-    }
-
-    loadRemoteData().then((remoteData) => {
-      setRemoteData(remoteData)
-      setRemoteLoading(false)
-    })
-  }, [])
-
 
   const handleAdd = (e) => {
     e.preventDefault();
@@ -41,11 +19,14 @@ export default Form.create('add-update-teacher-form')((props) => {
 
     props.form.validateFields((err, values) => {
       if (!err) {
-        setTimeout(() => {
-          props.handleCancel()
-          props.form.resetFields();
+        props.handleAdd(values).then(() => {
+          handleCancel()
+          resetFields()
           setLoading(false)
-        }, 1500)
+        }).catch(() => {
+          //handle if error
+          setLoading(false)
+        })
       }
       else {
         setLoading(false)
@@ -60,11 +41,14 @@ export default Form.create('add-update-teacher-form')((props) => {
 
     props.form.validateFields((err, values) => {
       if (!err) {
-        setTimeout(() => {
-          props.handleCancel()
-          props.form.resetFields();
+        props.handleUpdate(values).then(() => {
+          handleCancel()
+          resetFields()
           setLoading(false)
-        }, 1500)
+        }).catch(() => {
+          //handle if error
+          setLoading(false)
+        })
       }
       else {
         setLoading(false)
@@ -76,10 +60,6 @@ export default Form.create('add-update-teacher-form')((props) => {
   const handleCancel = () => {
     resetFields()
     props.handleCancel()
-  }
-
-  const togglePasswordUpdate = () => {
-    setShowPasswordUpdate(!showPasswordUpdate)
   }
 
   return (
@@ -120,36 +100,32 @@ export default Form.create('add-update-teacher-form')((props) => {
               />,
             )}
           </Form.Item>
-          <Form.Item label="Bio" >
-            {getFieldDecorator('bio', {
+          <Form.Item label="Username" >
+            {getFieldDecorator('username', {
               rules: [
                 {
                   required: true,
-                  message: 'Please enter a bio',
                 },
               ],
             })(
-              <Input.TextArea
-                placeholder="bio"
-                rows={6}
+              <Input
+                placeholder="username"
               />,
             )}
           </Form.Item>
-          {(!props.isUpdate || (showPasswordUpdate)) &&
-            <Form.Item label='Password'>
-              {getFieldDecorator('password', {
-                rules: [
-                  { required: true, message: 'Please enter a password!' },
-                ],
-              })(
-                <Input.Password
-                  type='password'
-                  placeholder="password"
-                />,
-              )}
-            </Form.Item>
-          }
-          {props.isUpdate && <Checkbox checked={showPasswordUpdate} onChange={togglePasswordUpdate}>Update Password</Checkbox>}
+          <Form.Item label="type" >
+            {getFieldDecorator('type', {
+              rules: [
+                {
+                  required: true,
+                },
+              ],
+            })(
+              <Input
+                placeholder="type"
+              />,
+            )}
+          </Form.Item>
         </Form>
       </Modal>
     </div>

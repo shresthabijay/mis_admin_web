@@ -3,9 +3,7 @@ import "./_dashboard.scss";
 import DashboardSlider from "./DashboardSlider";
 import TopNavBar from "./TopNavBar";
 import { Switch, Route } from "react-router-dom";
-import Users from "../Users/Users";
-import Stores from "../Stores/Stores";
-import UserRole from "../UserRoles/UserRoles";
+import { User } from "../User/User";
 import { Stream } from "../Stream/Stream";
 import { Course } from "../Course/Course";
 import { StreamAdmin } from "../StreamAdmin/StreamAdmin";
@@ -41,17 +39,7 @@ export default function Dashboard(props) {
               <Route path={props.match.url + "/teachers"} exact component={Teacher} />
               <Route path={props.match.url + "/students"} exact component={Student} />
               <Route path={props.match.url + "/notices"} exact component={Notice} />
-              <Route path={props.match.url + "/"} exact component={Users} />
-              <Route
-                path={props.match.url + "/store"}
-                exact
-                component={Stores}
-              />
-              <Route
-                path={props.match.url + "/roles"}
-                exact
-                component={UserRole}
-              />
+              <Route path={props.match.url + "/users"} exact component={User} />
             </Switch>
           </div>
         </div>

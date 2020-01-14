@@ -1,9 +1,9 @@
 import React from "react"
 import { Table, Modal, Tag, Button, Divider } from 'antd'
-import AddUpdateTeacherModal from "./AddUpdateTeacherModal"
-import { getTeachers, deleteTeacher, addTeacher, updateTeacher } from "../../../api/apiCalls"
+import AddUpdateUserModal from "./AddUpdateUserModal"
+import { deleteUser, addUser, getUsers, resetUserPassword, updateUser } from "../../../api/apiCalls"
 
-export const Teacher = () => {
+export const User = () => {
   const [showModal, setShowModal] = React.useState(false)
   const [updateData, setUpdateData] = React.useState(null)
   const [isUpdate, setIsUpdate] = React.useState(false)
@@ -12,7 +12,7 @@ export const Teacher = () => {
 
   React.useEffect(() => {
     setIsLoading(true)
-    getTeachers().then((res) => {
+    getUsers().then((res) => {
       setTableData(res)
       setIsLoading(false)
     }).catch((err) => {
@@ -21,19 +21,19 @@ export const Teacher = () => {
   }, [])
 
   const handleDelete = async (recordToDelete) => {
-    let response = await deleteTeacher(recordToDelete.id)
+    let response = await deleteUser(recordToDelete.id)
     setTableData(tableData.filter(record => (recordToDelete.id !== record.id)))
     return response
   }
 
   const handleAdd = async (formData) => {
-    const response = await addTeacher(formData)
+    const response = await addUser(formData)
     setTableData([...tableData, formData])
     return response
   }
 
   const handleUpdate = async (formData) => {
-    const response = await updateTeacher(updateData.id, formData)
+    const response = await updateUser(updateData.id, formData)
     setTableData(tableData.map(record => (updateData.id === record.id ? formData : record)))
     return response
   }
@@ -51,20 +51,39 @@ export const Teacher = () => {
   }
 
   const ActionComponent = ({ record }) => {
-    return (< span >
-      <Tag className="pointer" color="cyan" onClick={() => { showUpdateModal(record) }}>Update</Tag>
-      <Divider type="vertical" />
-      <Tag className="pointer" color="red" onClick={() => {
-        Modal.confirm({
-          title: 'Do you want to delete this teacher?',
-          content: 'This teacher will be deleted',
-          onOk: async () => {
-            await handleDelete(record)
-          },
-          onCancel() { },
-        })
-      }}>Delete</Tag>
-    </span >
+    return (
+      <span>
+        <Tag className="pointer" color="cyan" onClick={() => { showUpdateModal(record) }}>Update</Tag>
+        <Divider type="vertical" />
+        <Tag
+          className="pointer"
+          color="cyan"
+          onClick={
+            () =>
+              Modal.confirm({
+                title: 'Do you want to reset this users password?',
+                content: 'This users password will reset',
+                onOk: async () => {
+                  await resetUserPassword({ user_id: record.id })
+                },
+                onCancel() { },
+              })
+          }
+        >
+          Reset Password
+        </Tag>
+        <Divider type="vertical" />
+        <Tag className="pointer" color="red" onClick={() => {
+          Modal.confirm({
+            title: 'Do you want to delete this user?',
+            content: 'This user will be deleted',
+            onOk: async () => {
+              await handleDelete(record)
+            },
+            onCancel() { },
+          })
+        }}>Delete</Tag>
+      </span>
     )
   }
 
@@ -85,9 +104,14 @@ export const Teacher = () => {
       key: 'username',
     },
     {
-      type: 'type',
-      dataIndex: 'type',
-      key: 'type',
+      title: 'gender',
+      dataIndex: 'gender',
+      key: 'gender',
+    },
+    {
+      title: 'phone',
+      dataIndex: 'phone',
+      key: 'phone',
     },
     {
       title: 'Action',
@@ -98,7 +122,7 @@ export const Teacher = () => {
 
   return (
     <div className="courses-page">
-      <AddUpdateTeacherModal
+      <AddUpdateUserModal
         visible={showModal}
         isUpdate={isUpdate}
         defaultValues={updateData}
@@ -108,7 +132,7 @@ export const Teacher = () => {
       />
       <br />
       <div className="flex jcsb">
-        <h1 className="title"> Teacher </h1>
+        <h1 className="title"> User </h1>
         <Button
           type="primary"
           onClick={() => {
@@ -116,15 +140,16 @@ export const Teacher = () => {
           }}
           icon="plus"
         >
-          Add Teacher
+          Add User
         </Button>
       </div>
       <br />
       <Table
         bordered
         columns={columns}
-        dataSource={tableData.map((record, i) => ({ ...record, key: i }))}
+        dataSource={tableData.map((record, i) => ({ ...record, phone: parseInt(record.phone), key: i }))}
         rowKey={record => record.id}
+        isLoading={isLoading}
         rowClassName="custom-table-row"
       />
     </div>

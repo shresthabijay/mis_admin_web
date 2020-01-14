@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Form, Button, Input, Icon, Select } from "antd";
+import { Modal, Form, Button, Input, Icon, Select, Checkbox } from "antd";
 
 const { Option } = Select
 
@@ -7,10 +7,15 @@ export default Form.create('add-update-course-form')((props) => {
 
   const { getFieldDecorator, setFieldsValue, resetFields } = props.form;
   const [loading, setLoading] = React.useState(false);
+  const [showAddRoles, setShowAddRoles] = React.useState(false)
 
   React.useEffect(() => {
     if (props.isUpdate) setFieldsValue(props.defaultValues)
   }, [props.isUpdate])
+
+  const toggleAddRoles = () => {
+    setShowAddRoles(!showAddRoles)
+  }
 
   const handleAdd = (e) => {
     e.preventDefault();
@@ -98,6 +103,22 @@ export default Form.create('add-update-course-form')((props) => {
               />,
             )}
           </Form.Item>
+
+          {/* {showAddRoles &&
+            <Form.Item label='Password'>
+              {getFieldDecorator('password', {
+                rules: [
+                  { required: true, message: 'Please enter a password!' },
+                ],
+              })(
+                <Input.Password
+                  type='password'
+                  placeholder="password"
+                />,
+              )}
+            </Form.Item>
+          }
+          <Checkbox checked={showAddRoles} onChange={toggleAddRoles}>Add Roles</Checkbox> */}
         </Form>
       </Modal>
     </div>

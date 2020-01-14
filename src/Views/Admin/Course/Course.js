@@ -27,13 +27,13 @@ export const Course = () => {
   }
 
   const handleAdd = async (formData) => {
-    const response = await addCourse({ name: formData.name })
+    const response = await addCourse(formData)
     setTableData([...tableData, formData])
     return response
   }
 
   const handleUpdate = async (formData) => {
-    const response = await updateCourse(updateData.id, { name: formData.name })
+    const response = await updateCourse(updateData.id, formData)
     setTableData(tableData.map(record => (updateData.id === record.id ? formData : record)))
     return response
   }

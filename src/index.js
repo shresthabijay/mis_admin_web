@@ -5,7 +5,6 @@ import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import Login from "./Views/Login/Login";
 import "./styles/index.scss";
 import Dashboard from "./Views/Admin/Dashboard/Dashboard";
-import StoreUserDashboard from "./Views/StoreUser/StoreUserDashboard/StoreUserDashboard";
 
 export default function App() {
   return (
@@ -16,7 +15,6 @@ export default function App() {
           <Redirect to="/home" />
         </Route>
         <Route path="/admin" component={Dashboard} />
-        <Route path="/store_user" component={StoreUserDashboard} />
       </BrowserRouter>
     </React.Fragment>
   );
